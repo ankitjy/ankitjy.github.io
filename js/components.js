@@ -3,6 +3,8 @@
     name: "Ankit Yadav",
     email: "mailto:hak171562@gmail.com",
     github: "https://github.com/ankity1206",
+    dropboxId: "9qOQ4G",
+    dropbox: "https://tally.so/r/9qOQ4G",
     resume: "https://drive.google.com/file/d/1fiaLy9py9AgcZHLEAY3RUhps0uBKTH_G/view?usp=sharing",
     nav: [
       { label: "Home",             href: "/"                      },
@@ -50,8 +52,13 @@
     var links = SITE.links.map(function (l) {
       return ' · <a href="' + l.href + '">' + l.label + '</a>';
     }).join("");
-    return '<footer class="site-footer">&copy; ' + new Date().getFullYear() +
-           ' ' + SITE.name + links + '</footer>';
+    var folderIcon = '<svg class="btn-icon" viewBox="0 0 16 16" aria-hidden="true">' +
+                       '<path fill="currentColor" d="M.54 3.87.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3H13.5a2 2 0 0 1 2 2v.5H.54v-1.63ZM0 6.5h16l-.5 6.5a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2L0 6.5Z"/>' +
+                     '</svg>';
+    return '<footer class="site-footer">' +
+             '<span>&copy; ' + new Date().getFullYear() + ' ' + SITE.name + links + '</span>' +
+             '<a href="' + SITE.dropbox + '" class="resume-btn" data-drop-btn target="_blank" rel="noopener noreferrer" aria-label="Drop files" title="Drop files">' + folderIcon + '</a>' +
+           '</footer>';
   }
 
   function mount(id, html) {
@@ -61,4 +68,35 @@
 
   mount("site-header", renderHeader());
   mount("site-footer", renderFooter());
+  initDropPopup();
+
+  // Opens the Tally form as a small corner popup; falls back to the plain
+  // link (new tab) if the Tally script is blocked or hasn't loaded yet.
+  function initDropPopup() {
+    var btn = document.querySelector(".site-footer [data-drop-btn]");
+    if (!btn) return;
+
+    var s = document.createElement("script");
+    s.src = "https://tally.so/widgets/embed.js";
+    s.async = true;
+    document.head.appendChild(s);
+
+    btn.addEventListener("click", function (e) {
+      if (!window.Tally || typeof window.Tally.openPopup !== "function") return;
+      e.preventDefault();
+      window.Tally.openPopup(SITE.dropboxId, {
+        width: 500,
+        onOpen: function () { document.addEventListener("click", closeOnOutside); },
+        onClose: function () { document.removeEventListener("click", closeOnOutside); }
+      });
+    });
+
+    // Clicks inside the form's iframe never reach this document, so any click
+    // here that isn't on the button or Tally's own popup wrapper is "outside".
+    function closeOnOutside(e) {
+      if (btn.contains(e.target)) return;
+      if (e.target.closest && e.target.closest('[class*="tally"]')) return;
+      window.Tally.closePopup(SITE.dropboxId);
+    }
+  }
 })();

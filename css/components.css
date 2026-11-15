@@ -68,6 +68,10 @@
 .detail { font-size: 0.9em; color: var(--muted); }
 
 .site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6em;
   padding: 0.7em max(4vw, calc((100% - 48rem) / 2));
   background: var(--bar);
   border-top: 1px solid var(--border);
