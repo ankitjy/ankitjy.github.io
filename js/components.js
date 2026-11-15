@@ -2,7 +2,7 @@
   var SITE = {
     name: "Ankit Yadav",
     email: "mailto:hak171562@gmail.com",
-    github: "https://github.com/ankity1206",
+    github: "https://github.com/ankitjy",
     dropboxId: "9qOQ4G",
     dropbox: "https://tally.so/r/9qOQ4G",
     resume: "https://drive.google.com/file/d/1fiaLy9py9AgcZHLEAY3RUhps0uBKTH_G/view?usp=sharing",
