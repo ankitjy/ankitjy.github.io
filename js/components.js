@@ -20,8 +20,16 @@
   }
 
   function currentPage() {
-    var file = location.pathname.split("/").pop();
-    return (file === "" || file === "index.html") ? "/" : "/" + file;
+    if (location.protocol === "file:") {
+      var file = location.pathname.split("/").pop();
+      return (file === "" || file === "index.html") ? "/" : "/" + file;
+    }
+    var path = location.pathname;
+    if (path === "/index.html") return "/";
+    if (path !== "/" && !path.endsWith("/") && !path.endsWith(".html")) {
+      path += ".html";
+    }
+    return path;
   }
 
   function renderHeader() {
@@ -96,6 +104,7 @@
     function closeOnOutside(e) {
       if (btn.contains(e.target)) return;
       if (e.target.closest && e.target.closest('[class*="tally"]')) return;
+      document.removeEventListener("click", closeOnOutside);
       window.Tally.closePopup(SITE.dropboxId);
     }
   }

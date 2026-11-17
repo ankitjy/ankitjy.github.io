@@ -15,6 +15,10 @@
   flex-wrap: wrap;
   gap: 0.2em 1.2em;
 }
+.site-nav a,
+.site-nav a:visited {
+  color: var(--accent);
+}
 .site-nav a[aria-current="page"] {
   color: var(--text);
   font-weight: bold;

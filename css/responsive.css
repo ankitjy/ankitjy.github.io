@@ -5,6 +5,8 @@
 }
 
 @media print {
-  .site-header { display: none; }
-  a { color: #000; }
+  .site-header, .site-footer { display: none; }
+  body { color: #000; background: #fff; }
+  .detail { color: #444; }
+  a, a:visited { color: #000; }
 }
