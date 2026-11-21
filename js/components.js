@@ -50,7 +50,7 @@
              '<div class="site-actions">' +
                '<a href="' + SITE.email + '" class="resume-btn" aria-label="Email">' + mailIcon + '</a>' +
                '<a href="' + SITE.github + '" class="resume-btn" target="_blank" rel="noopener noreferrer" aria-label="GitHub">' + githubIcon + '</a>' +
-               '<a href="' + SITE.resume + '" class="resume-btn" target="_blank" rel="noopener noreferrer">CV</a>' +
+               '<a href="' + SITE.resume + '" class="resume-btn" target="_blank" rel="noopener noreferrer"><span class="cv-badge">CV</span></a>' +
                '<button type="button" class="theme-toggle" data-theme-toggle></button>' +
              '</div>' +
            '</header>';
