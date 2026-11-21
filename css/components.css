@@ -67,8 +67,11 @@
 }
 
 .plain { padding-left: 1.2em; margin: 0.6em 0; }
-.plain li { margin-bottom: 0.5em; }
-.entry-list li { margin-bottom: 0.8em; }
+.plain > li { margin-bottom: 0.5em; }
+.entry-list > li { margin-bottom: 0.8em; }
+.sub-list { padding-left: 1.2em; margin: 0.35em 0 0; }
+.sub-list > li { margin-bottom: 0.3em; }
+.sub-list > li:last-child { margin-bottom: 0; }
 .detail { font-size: 0.9em; color: var(--muted); }
 
 .site-footer {
