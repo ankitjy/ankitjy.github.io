@@ -6,4 +6,9 @@
       ? "dark" : "light";
   }
   document.documentElement.setAttribute("data-theme", theme);
+  var color = theme === "dark" ? "#242220" : "#eae4d8";
+  var metas = document.querySelectorAll('meta[name="theme-color"]');
+  for (var i = 0; i < metas.length; i++) {
+    metas[i].setAttribute("content", color);
+  }
 })();

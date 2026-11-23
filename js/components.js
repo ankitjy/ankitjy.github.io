@@ -1,7 +1,7 @@
 (function () {
   var SITE = {
     name: "Ankit Yadav",
-    email: "mailto:hak171562@gmail.com",
+    email: "mailto:ankitjy1@gmail.com",
     github: "https://github.com/ankitjy",
     dropboxId: "9qOQ4G",
     dropbox: "https://tally.so/r/9qOQ4G",
@@ -11,7 +11,9 @@
       { label: "Towards Research", href: "/towards-research.html" },
       { label: "Misc",             href: "/misc.html"             }
     ],
-    links: []
+    links: [
+      { label: "ankitjy1@gmail.com", href: "mailto:ankitjy1@gmail.com" }
+    ]
   };
 
   if (location.protocol !== "file:" && location.pathname.endsWith("/index.html")) {
@@ -46,11 +48,11 @@
                      '</svg>';
     return '<header class="site-header">' +
              '<div class="site-title"><a href="/">' + SITE.name + '</a></div>' +
-             '<nav class="site-nav">' + nav + '</nav>' +
+             '<nav class="site-nav" aria-label="Primary">' + nav + '</nav>' +
              '<div class="site-actions">' +
-               '<a href="' + SITE.email + '" class="resume-btn" aria-label="Email">' + mailIcon + '</a>' +
-               '<a href="' + SITE.github + '" class="resume-btn" target="_blank" rel="noopener noreferrer" aria-label="GitHub">' + githubIcon + '</a>' +
-               '<a href="' + SITE.resume + '" class="resume-btn" target="_blank" rel="noopener noreferrer"><span class="cv-badge">CV</span></a>' +
+               '<a href="' + SITE.email + '" class="resume-btn" aria-label="Email" title="Email">' + mailIcon + '</a>' +
+               '<a href="' + SITE.github + '" class="resume-btn" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">' + githubIcon + '</a>' +
+               '<a href="' + SITE.resume + '" class="resume-btn" target="_blank" rel="noopener noreferrer" aria-label="Curriculum Vitae" title="CV"><span class="cv-badge">CV</span></a>' +
                '<button type="button" class="theme-toggle" data-theme-toggle></button>' +
              '</div>' +
            '</header>';
@@ -78,25 +80,66 @@
   mount("site-footer", renderFooter());
   initDropPopup();
 
-  // Opens the Tally form as a small corner popup; falls back to the plain
-  // link (new tab) if the Tally script is blocked or hasn't loaded yet.
+  // Lazy-loads the Tally script on first hover, focus, or click and opens the
+  // form as a small corner popup; falls back to the plain link if blocked.
   function initDropPopup() {
     var btn = document.querySelector(".site-footer [data-drop-btn]");
     if (!btn) return;
 
-    var s = document.createElement("script");
-    s.src = "https://tally.so/widgets/embed.js";
-    s.async = true;
-    document.head.appendChild(s);
+    var scriptLoading = false;
+    var loadFailed = false;
+    var pendingOpen = false;
 
-    btn.addEventListener("click", function (e) {
-      if (!window.Tally || typeof window.Tally.openPopup !== "function") return;
-      e.preventDefault();
+    function openPopup() {
       window.Tally.openPopup(SITE.dropboxId, {
         width: 500,
         onOpen: function () { document.addEventListener("click", closeOnOutside); },
         onClose: function () { document.removeEventListener("click", closeOnOutside); }
       });
+    }
+
+    function loadTally() {
+      if (scriptLoading || loadFailed) return;
+      if (window.Tally && typeof window.Tally.openPopup === "function") return;
+      scriptLoading = true;
+      var s = document.createElement("script");
+      s.src = "https://tally.so/widgets/embed.js";
+      s.async = true;
+      s.onload = function () {
+        scriptLoading = false;
+        if (pendingOpen) {
+          pendingOpen = false;
+          if (window.Tally && typeof window.Tally.openPopup === "function") {
+            openPopup();
+          } else {
+            loadFailed = true;
+            window.open(btn.href, "_blank", "noopener,noreferrer");
+          }
+        }
+      };
+      s.onerror = function () {
+        scriptLoading = false;
+        loadFailed = true;
+        if (pendingOpen) {
+          pendingOpen = false;
+          window.open(btn.href, "_blank", "noopener,noreferrer");
+        }
+      };
+      document.head.appendChild(s);
+    }
+
+    btn.addEventListener("mouseenter", loadTally, { once: true });
+    btn.addEventListener("focus", loadTally, { once: true });
+
+    btn.addEventListener("click", function (e) {
+      if (loadFailed) return;
+      e.preventDefault();
+      if (window.Tally && typeof window.Tally.openPopup === "function") {
+        openPopup();
+      } else {
+        pendingOpen = true;
+        loadTally();
+      }
     });
 
     // Clicks inside the form's iframe never reach this document, so any click
