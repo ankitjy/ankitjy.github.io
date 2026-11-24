@@ -5,7 +5,7 @@
     github: "https://github.com/ankitjy",
     dropboxId: "9qOQ4G",
     dropbox: "https://tally.so/r/9qOQ4G",
-    resume: "https://drive.google.com/file/d/1fiaLy9py9AgcZHLEAY3RUhps0uBKTH_G/view?usp=sharing",
+    resume: "/cv.pdf",
     nav: [
       { label: "Home",             href: "/"                      },
       { label: "Towards Research", href: "/towards-research.html" },
